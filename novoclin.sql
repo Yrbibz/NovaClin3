@@ -132,16 +132,6 @@ VALUES
 (2, 3, 1, '2024-06-22 15:40', NULL, NULL);
 
 
-CREATE TABLE Consulta (
-idconsulta INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-idmedico INT NOT NULL,
-idpaciente INT NOT NULL,
-idrecepcionista INT NOT NULL,
-datahora DATETIME NOT NULL, 
-sintomas VARCHAR(200), 
-prescricao VARCHAR(200)
-);
-
 INSERT INTO Exame  
 VALUES
 (1, 6, '2024-06-21 14:45', 'Eletrocardiograma', 'Em análise', NULL, NULL, NULL),
@@ -152,7 +142,3 @@ VALUES
 UPDATE consulta
 SET datahora='2024-06-20 16:30'
 WHERE idconsulta=1
-
-
-
-
