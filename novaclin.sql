@@ -69,7 +69,7 @@ SHOW TABLES
 
 /*fazendo em casa*/
 
-INSERT INTO paciente
+INSERT INTO paciente /*inserindo paciente de forma implicita*/
 VALUES
 (1, 'Donald','95251877803','13999891584','donaldinho@gmail.com', 'Avenida Conselheiro Nébias', '325', 'apto 152', 'Santos', '11045001', 'É paranóico, não desenvolveu bem a fala e lida com graves problemas de raiva'),
 (2, 'Margarida','24909330860','13994617584','margarina@gmail.com', 'Rua Alameda Dois', '84', NULL, 'São Vicente', '11348300', NULL),
@@ -106,4 +106,53 @@ VALUES
 SELECT * FROM especialidade
 
 
+INSERT INTO medico /*inserindo paciente de forma implicita*/
+VALUES
+(1, 1, 'Pardal','765544SP','pardal_med.senaclin','123654'),
+(2, 5, 'Mônica','768880SP','monica_med.senaclin','666355'),
+(3, 3, 'Zé Carioca','165544RJ','zeca_med.senaclin','123456'),
+(4, 4, 'Magali','265544SP','magali_med.senaclin','785441'),
+(5, 2, 'Horácio','365544MG','horacio_med.senaclin','985632');
+
+SELECT * FROM medico
+
+INSERT INTO consulta (idmedico, idpaciente, idrecepcionista, datahora, sintomas, prescricao)
+VALUES 
+(1, 1, 1, '2024-06-20 14:30', 'Febre e hemorragia interna', '3 ave maria'),
+(2, 2, 1, '2024-06-20 15:40', NULL, NULL),
+(3, 3, 1, '2024-07-02 14:00', NULL, NULL),
+(4, 7, 2, '2024-07-03 15:30', NULL, NULL),
+(5, 8, 2, '2024-07-03 16:30', NULL, NULL);
+
+SELECT * FROM consulta
+
+INSERT INTO consulta (idmedico, idpaciente, idrecepcionista, datahora, sintomas, prescricao)
+VALUES 
+(1, 3, 1, '2024-06-21 14:30', 'Dores agudas na lombar', NULL),
+(2, 3, 1, '2024-06-22 15:40', NULL, NULL);
+
+
+CREATE TABLE Consulta (
+idconsulta INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+idmedico INT NOT NULL,
+idpaciente INT NOT NULL,
+idrecepcionista INT NOT NULL,
+datahora DATETIME NOT NULL, 
+sintomas VARCHAR(200), 
+prescricao VARCHAR(200)
+);
+
+INSERT INTO Exame  
+VALUES
+(1, 6, '2024-06-21 14:45', 'Eletrocardiograma', 'Em análise', NULL, NULL, NULL),
+(2, 7, '2024-06-22 16:00', 'Raio-X Coluna', 'Em análise', NULL, NULL, NULL);
  
+ SELECT * FROM exame
+
+UPDATE consulta
+SET datahora='2024-06-20 16:30'
+WHERE idconsulta=1
+
+
+
+
