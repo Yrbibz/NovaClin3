@@ -12,7 +12,7 @@ senha CHAR(6)NOT NULL,
 celular CHAR(11)  
 );
 
-SHOW TABLES  
+SELECT *  FROM recepcionsita
 DROP TABLE medico
 
 CREATE TABLE Paciente (
@@ -68,7 +68,7 @@ CONSTRAINT chk_statusexame CHECK (statusexame='Em análise' OR statusexame='Disp
 SHOW TABLES
 
 /*fazendo em casa*/
-
+/*1.Inserir de forma implícita 8 pacientes*/
 INSERT INTO paciente /*inserindo paciente de forma implicita*/
 VALUES
 (1, 'Donald','95251877803','13999891584','donaldinho@gmail.com', 'Avenida Conselheiro Nébias', '325', 'apto 152', 'Santos', '11045001', 'É paranóico, não desenvolveu bem a fala e lida com graves problemas de raiva'),
@@ -83,6 +83,7 @@ VALUES
 SELECT * FROM paciente
 
 /*--------------------*/
+/*2.Inserir de forma explícita 3 recepcionistas*/
 INSERT INTO Recepcionsita (nomerecepcionista, cpf, login, senha, celular)
 VALUES ('Chico Bento', '73198338832', 'chicobento.senaclin', '1234', '13995051944');
 
@@ -94,7 +95,7 @@ VALUES ('Cebolinhaa', '13543757857', 'cebol.senaclin', '123456', NOT NULL);
 
 SELECT * FROM recepcionsita
 
-
+/*3.Inserir de forma explícita 5 especialidades. */
 INSERT INTO especialidade (nomeespecialidade)
 VALUES 
 ('Cardiologista'),
@@ -105,8 +106,8 @@ VALUES
 
 SELECT * FROM especialidade
 
-
-INSERT INTO medico /*inserindo paciente de forma implicita*/
+/*4.Inserir de forma implícita 5 médicos*/
+INSERT INTO medico 
 VALUES
 (1, 1, 'Pardal','765544SP','pardal_med.senaclin','123654'),
 (2, 5, 'Mônica','768880SP','monica_med.senaclin','666355'),
@@ -116,6 +117,7 @@ VALUES
 
 SELECT * FROM medico
 
+/*5. Inserir de forma explícita uma consulta para cada médico*/
 INSERT INTO consulta (idmedico, idpaciente, idrecepcionista, datahora, sintomas, prescricao)
 VALUES 
 (1, 1, 1, '2024-06-20 14:30', 'Febre e hemorragia interna', '3 ave maria'),
@@ -126,12 +128,13 @@ VALUES
 
 SELECT * FROM consulta
 
+/*6.Inserir mais duas consultas ao Patinhas*/
 INSERT INTO consulta (idmedico, idpaciente, idrecepcionista, datahora, sintomas, prescricao)
 VALUES 
 (1, 3, 1, '2024-06-21 14:30', 'Dores agudas na lombar', NULL),
 (2, 3, 1, '2024-06-22 15:40', NULL, NULL);
 
-
+/*7.Inserir um exame para cada consulta do Patinhas criada no item anterior (6)*/
 INSERT INTO Exame  
 VALUES
 (1, 6, '2024-06-21 14:45', 'Eletrocardiograma', 'Em análise', NULL, NULL, NULL),
@@ -139,11 +142,14 @@ VALUES
  
  SELECT * FROM exame
 
+/*8.Remarcar (Atualizar) a consulta do Donald para a mesma data porém, 2hs mais tarde.*/
 UPDATE consulta
 SET datahora='2024-06-20 16:30'
 WHERE idconsulta=1
 
-/*9*/ 
+/*9. A Minie mudou de endereço mas não mudou de cidade (logradouro, numero e 
+complemento). Realize a alteração dos dados.
+*/
 UPDATE paciente
 SET  logradouro= 'Rua da Prisão',
 numero= '103',
@@ -152,58 +158,65 @@ WHERE idpaciente=8
  
 SELECT * FROM consulta
  
-/*10*/
+/*10.O Mickey mudou o celular, realize a alteração*/
 UPDATE paciente
 SET celular= '21967452123'
 WHERE idpaciente = 7
  
-/*11*/
+/*11.O Patinhas não poderá comparecer na consulta com o Ze Carioca. Realize a exclusão da 
+mesma no sistema. Foi possível? Justifique.*/
 DROP consulta
 WHERE idconsulta = 3 
 /*não deu n sei pq*/
 
-/*12*/
+/*12.Realize a exclusão da Dr Mônica da tabela Medico. Foi possível? Justifique.
+*/
 DROP medico 
 WHERE idmedico = 2 
 /* Não deu pq tem consultas com o id dela */
 
 /**/
 
-/*13*/
+/*13.Exibir a data de todas as consultas em ordem cronológica, da que está mais próxima para a 
+que está mais longe.*/
 SELECT * FROM consulta
 SELECT idconsulta, datahora FROM consulta
 ORDER BY datahora ASC
 
-/*14*/
+/*14.Exibir todos os dados da tabela médico.*/
 SELECT * FROM medico
  
-/*15*/
+/*15.Exibir apenas as cidades em que a clínica possui pacientes, em ordem alfabética.*/
 SELECT cidade FROM paciente
 ORDER BY cidade ASC
  
-/*16*/
+/*16.Exibir nome, celular e e-mail de todos os pacientes da clínica, em ordem alfabética.
+*/
 SELECT nomepaciente, celular, email FROM paciente
 ORDER BY nomepaciente ASC
  
-/*17*/
+/*17.Atualizar apenas o CRM do Dr.Pardal que foi cadastrado errado no sistema.*/
 UPDATE medico
 SET crm = '765454SP'
 WHERE idmedico = 1
  
-/*18*/
+/*18.Resetar a senha de todos os médicos do sistema para o padrão "DOCTOR".*/
 UPDATE medico
 SET senha = 'DOCTOR'
  
-/*19*/
+/*19.Exibir apenas o nome do médico e seu CRM, dos médicos registrados em SP, tudo isto em 
+ordem alfabética.*/
 SELECT nomemedico, crm FROM medico
 WHERE crm LIKE '%SP'
 ORDER BY nomemedico ASC
  
-/*20*/
+/*20.Exibir nome e celular de todos os pacientes que vivem em Santos e possuem nome 
+iniciando com a letra P.*/
 SELECT nomepaciente, celular FROM paciente
 WHERE nomepaciente LIKE 'P%'
  
-/*desafio*/
+/*DESAFIO: Exibir o nome, logradouro, numero e cidade de todos os pacientes que moram em 
+casa, em ordem alfabética.*/
 SELECT nomepaciente, logradouro, numero, cidade FROM paciente
 WHERE complemento <> '%'
 ORDER BY nomepaciente ASC
