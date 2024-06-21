@@ -142,3 +142,27 @@ VALUES
 UPDATE consulta
 SET datahora='2024-06-20 16:30'
 WHERE idconsulta=1
+
+/*9*/ 
+UPDATE paciente
+SET  logradouro= 'Rua da Prisão',
+numero= '103',
+complemento= 'apto201'
+WHERE idpaciente=8
+ 
+SELECT * FROM consulta
+ 
+/*10*/
+UPDATE paciente
+SET celular= '21967452123'
+WHERE idpaciente = 7
+ 
+/*11*/
+DROP consulta
+WHERE idconsulta = 3 
+/*não deu n sei pq*/
+
+/*12*/
+DROP medico 
+WHERE idmedico = 2 
+/* Não deu pq tem consultas com o id dela */
