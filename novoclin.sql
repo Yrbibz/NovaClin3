@@ -166,3 +166,44 @@ WHERE idconsulta = 3
 DROP medico 
 WHERE idmedico = 2 
 /* Não deu pq tem consultas com o id dela */
+
+/**/
+
+/*13*/
+SELECT * FROM consulta
+SELECT idconsulta, datahora FROM consulta
+ORDER BY datahora ASC
+
+/*14*/
+SELECT * FROM medico
+ 
+/*15*/
+SELECT cidade FROM paciente
+ORDER BY cidade ASC
+ 
+/*16*/
+SELECT nomepaciente, celular, email FROM paciente
+ORDER BY nomepaciente ASC
+ 
+/*17*/
+UPDATE medico
+SET crm = '765454SP'
+WHERE idmedico = 1
+ 
+/*18*/
+UPDATE medico
+SET senha = 'DOCTOR'
+ 
+/*19*/
+SELECT nomemedico, crm FROM medico
+WHERE crm LIKE '%SP'
+ORDER BY nomemedico ASC
+ 
+/*20*/
+SELECT nomepaciente, celular FROM paciente
+WHERE nomepaciente LIKE 'P%'
+ 
+/*desafio*/
+SELECT nomepaciente, logradouro, numero, cidade FROM paciente
+WHERE complemento <> '%'
+ORDER BY nomepaciente ASC
