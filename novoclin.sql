@@ -120,7 +120,7 @@ SELECT * FROM medico
 /*5. Inserir de forma explícita uma consulta para cada médico*/
 INSERT INTO consulta (idmedico, idpaciente, idrecepcionista, datahora, sintomas, prescricao)
 VALUES 
-(1, 1, 1, '2024-06-20 14:30', 'Febre e hemorragia interna', '3 ave maria'),
+(1, 1, 1, '2024-06-20senaclinsenaclinsenaclinsenaclin 14:30', 'Febre e hemorragia interna', '3 ave maria'),
 (2, 2, 1, '2024-06-20 15:40', NULL, NULL),
 (3, 3, 1, '2024-07-02 14:00', NULL, NULL),
 (4, 7, 2, '2024-07-03 15:30', NULL, NULL),
@@ -213,7 +213,7 @@ ORDER BY nomemedico ASC
 /*20.Exibir nome e celular de todos os pacientes que vivem em Santos e possuem nome 
 iniciando com a letra P.*/
 SELECT nomepaciente, celular FROM paciente
-WHERE nomepaciente LIKE 'P%'
+WHERE nomepaciente LIKE 'P%' AND cidade = 'Santos'
  
 /*DESAFIO: Exibir o nome, logradouro, numero e cidade de todos os pacientes que moram em 
 casa, em ordem alfabética.*/
