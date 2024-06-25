@@ -1,4 +1,4 @@
-CREATE DATABASE  novaclin
+novaclinCREATE DATABASE  novaclin
 
 USE novaclin
 
@@ -220,3 +220,123 @@ casa, em ordem alfabética.*/
 SELECT nomepaciente, logradouro, numero, cidade FROM paciente
 WHERE complemento <> '%'
 ORDER BY nomepaciente ASC
+
+/****************************************************/
+/*1.Buscar nome do médico, nome da especialidade, e crm de todos os médicos cuja especialidade 
+seja “Cardiologista”. */
+
+SELECT nomemedico, nomeespecialidade, crm FROM medico
+INNER JOIN especialidade
+ON especialidade.idespecialidade = medico.idespecialidade
+WHERE nomeespecialidade LIKE 'Cardiologista'
+
+SELECT * FROM especialidade
+
+/*2.Buscar quantos pacientes a clínica possui por cidade. */
+SELECT COUNT(idpaciente) AS 'Quantidade de pacientes', cidade FROM paciente
+GROUP BY cidade
+
+/*3.Buscar a data de todas as consultas, nome do médico e o nome do paciente, em ordem 
+cronológica. */
+SELECT * from consulta
+
+SELECT datahora, nomemedico, nomepaciente FROM consulta
+INNER JOIN paciente
+ON consulta.idpaciente = paciente.idpaciente
+INNER JOIN medico
+ON consulta.idmedico = medico.idmedico
+GROUP BY datahora ASC
+
+/*4.Buscar o nome do paciente, celular, email, e a data da consulta de todos os pacientes com 
+consulta marcada, desde que vivam em Santos.*/
+SELECT nomepaciente, celular, email, datahora FROM consulta
+INNER JOIN paciente
+ON consulta.idpaciente = paciente.idpaciente
+WHERE cidade = 'Santos'
+
+/*5.Buscar todos os pacientes que tenham com a letra "P" no nome.*/
+SELECT * FROM paciente
+WHERE nomepaciente LIKE '%p%'
+
+/*6.Buscar o nome do médico, a data da consulta, o nome do paciente e a especialidade do médico 
+de todas as consultas de determinado dia (escolhido por você), em ordem alfabética. */ 
+SELECT nomemedico, datahora, nomepaciente, nomeespecialidade FROM especialidade
+INNER JOIN medico
+ON medico.idespecialidade = especialidade.idespecialidade
+INNER JOIN consulta
+ON consulta.idmedico = medico.idmedico
+INNER JOIN paciente
+ON paciente.idpaciente = consulta.idpaciente
+WHERE datahora LIKE '2024-07-03%'
+GROUP BY nomemedico ASC
+
+/*7.Buscar o nome dos médicos e sua especialidade, apenas dos médicos com CRM de SP.*/
+SELECT nomemedico, nomeespecialidade FROM medico
+INNER JOIN especialidade
+ON medico.idespecialidade = especialidade.idespecialidade
+WHERE crm LIKE '%sp'
+
+/*8.Buscar a data da consulta que está mais longe na clínica.*/
+SELECT MAX(datahora) FROM consulta
+
+/*9.Buscar quantos médicos a clínica possui por especialidade.*/
+SELECT COUNT(idmedico) FROM/*---*/
+
+/*10.Buscar o nome, celular e email de todos os pacientes que começam com a letra “D” em ordem 
+alfabética. */
+SELECT nomepaciente, celular, email FROM paciente
+WHERE nomepaciente LIKE 'D%'
+GROUP BY nomepaciente asc
+
+/*11.Buscar todos os exames, bem como quem foi o médico que solicitou e a data do exame, em 
+ordem cronológica (por data). */
+SELECT * FROM exame;
+SELECT * FROM consulta;/*----*/
+
+/*12.Buscar o nome do médico, o crm e a data da consulta, de todos os médicos, ainda que não 
+possuam consultas.*/
+
+SELECT nomemedico, crm, datahora FROM medico
+LEFT JOIN consulta 
+ON consulta.idmedico = medico.idmedico
+
+SELECT * FROM consulta
+
+/*13.Buscar o nome de todos os pacientes, celular, email e data da consulta em ordem alfabética. 
+Trazer os pacientes ainda que não possuam consultas.*/
+SELECT nomepaciente, celular, email, datahora FROM paciente
+LEFT JOIN consulta
+ON consulta.idpaciente = paciente.idpaciente
+
+/*14.Buscar o nome de todos os pacientes, logradouro, número e complemento apenas dos 
+moradores que moram em São Paulo, em ordem alfabética. */
+SELECT nomepaciente, logradouro, numero, complemento FROM paciente
+WHERE cidade = 'São Paulo'
+ORDER BY nomepaciente asc
+
+SELECT * from paciente
+/*15.Buscar a data de todas as consultas, o nome do recepcionista que marcou, o nome do 
+paciente, o nome do médico, a especialidade do médico e o celular do paciente em ordem 
+cronológica invertida. */
+SELECT datahora, nomerecepcionista, nomepaciente, nomemedico, nomeespecialidade, celular FROM consulta
+INNER JOIN paciente
+ON paciente.idpaciente = consulta.idpaciente
+INNER JOIN recepcionsita
+ON consulta.idrecepcionista = recepcionsita.idrecepcionista
+INNER JOIN medico
+ON medico.idmedico = consulta.idmedico
+INNER JOIN especialidade
+ON medico.idespecialidade = especialidade.idespecialidade
+
+SELECT * FROM recepcionsita;
+SELECT * FROM paciente;
+SELECT * FROM medico;
+
+
+
+/*Desafio – é possível realizar? Justifique. 
+Precisamos de dois relatórios: 
+a) um relatório que mostre quantas consultas 
+cada médico realizou na clínica. 
+b) um relatório que mostre quantas consultas 
+foram realizadas por especialidade.*/
