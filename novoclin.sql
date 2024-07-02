@@ -345,17 +345,164 @@ SELECT * FROM paciente;
 SELECT * FROM medico;
 
 
+/*--------*/
 
-/*Desafio – é possível realizar? Justifique. 
-Precisamos de dois relatórios: 
-a) um relatório que mostre quantas consultas 
-cada médico realizou na clínica. */
+/*atv views e stored procedure*/
+/*1) Criar uma view que traga nome e contatos (telefones e pacientes) em ordem alfabética 
+e executá-la.*/
+CREATE VIEW vw_relatorioTelefonesNomes
+  AS
+  SELECT nomepaciente, celular FROM paciente
+    
+ SELECT nomepaciente, celular FROM vw_relatorioTelefonesNomes
+ 
+ /*2) Criar uma view que traga a quantidade de consultas agrupadas por especialidade e 
+executá-la.*/
+CREATE VIEW vw_quantidadeConsultas
+AS 
+SELECT COUNT(idconsulta), nomeespecialidade FROM medico
+INNER JOIN especialidade ON especialidade.idespecialidade = medico.idespecialidade
+INNER JOIN consulta
+ON consulta.idmedico = medico.idmedico
+GROUP BY nomeespecialidade
+
+
+SELECT * FROM vw_quantidadeConsultas
+
+/*3) Criar uma procedure que permita saber quantos médicos possuímos por especialidade. 
+A procedure deverá exibir a quantidade de médico de acordo com o nome da 
+especialidade informada. Executar a procedure.*/
+
+CREATE PROCEDURE ps_quantidadeMedicos
+(IN p_nomeespecialidade VARCHAR(30))
+SELECT COUNT(idmedico), nomeespecialidade FROM medico
+INNER JOIN especialidade ON especialidade.idespecialidade = medico.idespecialidade 
+WHERE nomeespecialidade = p_nomeespecialidade
+GROUP BY nomeespecialidade;
+
+
+CALL ps_quantidadeMedicos('Ortopedista')
+
+/*4) Criar uma procedure para resetar todas as senhas dos médicos para DOCTOR e 
+executá-la.*/
+UPDATE medico
+SET senha = 'jajamuda'
+
+CREATE PROCEDURE pu_resetarSenha
+()
+UPDATE medico
+SET senha = 'DOCTOR'
+
+
+CALL pu_resetarSenha()
+
+/*5) Criar uma procedure para alterar as informações de paciente.*/
+CREATE PROCEDURE pu_paciente
+()
+UPDATE paciente
+SET 
+(IN
+nomepaciente VARCHAR(50), 
+cpf CHAR (11),
+celular CHAR(11), 
+email VARCHAR(30), 
+logradouro VARCHAR(30), 
+numero VARCHAR(6),                    /*AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*/
+complemento VARCHAR (10),
+cidade VARCHAR (20),
+cep VARCHAR (8),
+OBS VARCHAR (100))
+INSERT INTO paciente
+(nomepaciente, cpf, celular, email, logradouro, numero, complemento, cidade, cep, obs)
+VALUES (nomepaciente, cpf, celular, email, logradouro, numero, complemento, cidade, cep, obs); 
+
+
+CALL pu_paciente (1, 'Donaldinho');
+
+/*6) Criar uma procedure para inserir uma consulta na clínica.*/
+CREATE PROCEDURE pi_consulta
+(IN
+idmedico INT,
+idpaciente INT,
+idrecepcionista INT,
+datahora DATETIME, 
+sintomas VARCHAR(200), 
+prescricao VARCHAR(200))
+
+INSERT INTO consulta
+(idmedico, idpaciente, idrecepcionista, datahora, sintomas, prescricao)
+VALUES (idmedico, idpaciente, idrecepcionista, datahora, sintomas, prescricao); 
+
+
+CALL pi_consulta (3, 6, 3, '2024-07-08 16:24', 'Diz estar vendo aliens', 'Internação no Hospital Psiquiatrico');
+
+
+/*7) Criar uma procedure para excluir um exame do sistema. (Obs - Sabemos que na prática 
+deveremos utilizar a exclusão lógica).*/
+CREATE PROCEDURE pd_exame
+(IN p_idexame INT)
+
+WHERE idexame = p_idexame; /*AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*/
+
+CALL pd_exame(2)
+
+/*8) Criar uma procedure que liste a data da consulta e o nome do paciente de acordo com 
+o nome do médico. Aqui, listaremos a agenda do médico. Execute a procedure.*/
+CREATE PROCEDURE ps_relatorioDCeNP
+(IN p_nomemedico VARCHAR(50))
+SELECT consulta.datahora, nomepaciente, nomemedico FROM consulta
+INNER JOIN paciente ON paciente.idPaciente = consulta.idpaciente
+INNER JOIN medico ON medico.idmedico = consulta.idmedico
+WHERE nomemedico = p_nomemedico;
+
+CALL ps_relatorioDCeNP ('Pardal')
+
+/* 9) Criar um mecanismo para trazer a quantidade de médicos que a clínica possui por 
+especialidade. Execute o mecanismo.
+*/
+CREATE VIEW vw_quantidadeMedicos
+AS 
+SELECT COUNT(idmedico), nomeespecialidade FROM medico
+INNER JOIN especialidade ON especialidade.idespecialidade = medico.idespecialidade
+GROUP BY nomeespecialidade
+
+SELECT * FROM vw_quantidadeMedicos
+
+/*10) Criar uma procedure que liste a data da consulta, o celular do paciente e a 
+especialidade da consulta de acordo com o nome do paciente informado, mas em 
+ordem cronológica. Neste caso estaremos verificando todas as consultas do paciente.*/
+CREATE PROCEDURE ps_relatorioDCE
+(IN p_nomepaciente VARCHAR(50))
+SELECT consulta.datahora, paciente.celular, nomeespecialidade FROM consulta
+INNER JOIN paciente ON paciente.idPaciente = consulta.idpaciente
+INNER JOIN medico ON medico.idmedico = consulta.idmedico
+INNER JOIN especialidade ON medico.idespecialidade = especialidade.idespecialidade
+WHERE nomepaciente = p_nomepaciente
+ORDER BY datahora asc;
+
+CALL ps_relatorioDCE ('Patinhas')
+
+/*DESAFIO: Criar uma procedure que sirva para atualizar a data de uma consulta. A procedure 
+deve receber ID da consulta e a data e hora para a qual queremos trocar.*/
+CREATE PROCEDURE pu_atualizarData
+(IN
+n_idconsulta INT 
+n_data DATETIME)
+UPDATE consulta
+SET consulta.datahora = n_data
+WHERE idconsulta = n_idconsulta AND consulta.datahora = n_data;
+
+
+CALL pu_resetarSenha(1, '2024-07-27 19:00:05')
 
 
 
 
 
-/*
-b) um relatório que mostre quantas consultas 
-foram realizadas por especialidade.*/
 
+/*---------*/
+SELECT * FROM especialidade;
+SELECT * FROM consulta;
+SELECT * FROM paciente;
+SELECT * FROM medico;
+SELECT * FROM exame;
