@@ -280,7 +280,11 @@ WHERE crm LIKE '%sp'
 SELECT MAX(datahora) FROM consulta
 
 /*9.Buscar quantos médicos a clínica possui por especialidade.*/
-SELECT COUNT(idmedico) FROM/*---*/
+SELECT COUNT(idmedico) FROM
+
+SELECT idmedico, nomeespecialidade FROM medico
+INNER JOIN especialidade ON medico.idespecialidade = especialidade.idespecialidade
+GROUP BY nomeespecialidade DESC
 
 /*10.Buscar o nome, celular e email de todos os pacientes que começam com a letra “D” em ordem 
 alfabética. */
@@ -290,8 +294,15 @@ GROUP BY nomepaciente asc
 
 /*11.Buscar todos os exames, bem como quem foi o médico que solicitou e a data do exame, em 
 ordem cronológica (por data). */
-SELECT * FROM exame;
-SELECT * FROM consulta;/*----*/
+SELECT * FROM exame; 
+SELECT * FROM consulta;
+
+
+SELECT nomeexame, nomemedico, exame.datahora
+FROM exame
+INNER JOIN consulta ON exame.idconsulta = consulta.idconsulta
+INNER JOIN medico ON consulta.idmedico = medico.idmedico
+ORDER BY exame.datahora;
 
 /*12.Buscar o nome do médico, o crm e a data da consulta, de todos os médicos, ainda que não 
 possuam consultas.*/
@@ -315,6 +326,7 @@ WHERE cidade = 'São Paulo'
 ORDER BY nomepaciente asc
 
 SELECT * from paciente
+
 /*15.Buscar a data de todas as consultas, o nome do recepcionista que marcou, o nome do 
 paciente, o nome do médico, a especialidade do médico e o celular do paciente em ordem 
 cronológica invertida. */
@@ -337,6 +349,13 @@ SELECT * FROM medico;
 /*Desafio – é possível realizar? Justifique. 
 Precisamos de dois relatórios: 
 a) um relatório que mostre quantas consultas 
-cada médico realizou na clínica. 
+cada médico realizou na clínica. */
+
+
+
+
+
+/*
 b) um relatório que mostre quantas consultas 
 foram realizadas por especialidade.*/
+
